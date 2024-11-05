@@ -1,0 +1,61 @@
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, classification_report
+
+# Load the Dataset
+# Replace "diabetes.csv" with the correct path to your dataset file if necessary
+df = pd.read_csv("diabetes.csv")
+
+# Data Preprocessing
+# Split data into features (X) and target (y)
+X = df.drop("Outcome", axis=1)  # assuming "Outcome" is the target column
+y = df["Outcome"]
+
+# Standardize the feature variables
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Implement KNN
+# Initialize the KNN classifier with k neighbors
+k = 5  # You can adjust k as needed
+knn = KNeighborsClassifier(n_neighbors=k)
+
+# Fit the model on the training data
+knn.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = knn.predict(X_test)
+
+# Compute Metrics
+# Confusion Matrix
+conf_matrix = confusion_matrix(y_test, y_pred)
+
+# Accuracy
+accuracy = accuracy_score(y_test, y_pred)
+
+# Error Rate
+error_rate = 1 - accuracy
+
+# Precision
+precision = precision_score(y_test, y_pred)
+
+# Recall
+recall = recall_score(y_test, y_pred)
+
+# Classification Report
+class_report = classification_report(y_test, y_pred)
+
+# Display the results
+print("Confusion Matrix:\n", conf_matrix)
+print("Accuracy:", accuracy)
+print("Error Rate:", error_rate)
+print("Precision:", precision)
+print("Recall:", recall)
+print("\nClassification Report:\n", class_report)
